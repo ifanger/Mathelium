@@ -10,4 +10,6 @@ function handleSocketEvents() {
 	socket.on('raw message', onRawMessageReceived);
 }
 
+function ping() {socket.emit('ping');}
+
 handleSocketEvents();
