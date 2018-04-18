@@ -29,7 +29,7 @@ io.on('connection', function(socket) {
 		console.log('Trying to login ' + user.username + ' with pass: ' + user.password);
 		var auth = false;
 		
-		if(user.username == 'Niunzin' && user.password == '123')
+		if(user.username == 'niunzin' && user.password == '123')
 			auth = true;
 		
 		if(auth) {
@@ -51,8 +51,6 @@ io.on('connection', function(socket) {
 	}
 	
 	onConnect();
-	
-	socket.emit('raw message', 'Bem-vindo.');
 });
 
 function getCurrentTimeInSeconds() { return Math.floor(Date.now() / 1000); }
