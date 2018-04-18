@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mathelium</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="modal fade" role="dialog" tabindex="-1" id="login-box">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Entrar</h4><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button></div>
+                <div class="modal-body">
+                    <p>Antes de continuar, pedimos para que você inicie uma sessão.</p>
+                    <form action="login" method="post" enctype="application/x-www-form-urlencoded" id="login-form">
+                        <div class="form-group"><label for="login-user">Usuário:</label><input class="form-control" type="text" name="login-user" placeholder="Digite seu nome de usuário..." id="login-user"></div>
+                        <div class="form-group"><label for="login-password">Senha:</label><input class="form-control form-control" type="password" name="login-password" placeholder="Digite sua senha..." id="login-password"></div>
+                        <hr>
+                        <div class="alert alert-danger" role="alert" id="login-feedback" style="display:none;"><span>Usuário ou senha incorreto(s).<br></span></div><button class="btn btn-outline-primary btn-block btn-lg" type="submit" id="login-btn">Entrar</button></form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <h1 class="text-center bg-light" id="feedback">Connecting...</h1>
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="http://127.0.0.1:3000/socket.io/socket.io.js"></script>
+    <script src="http://127.0.0.1:3000/z.js"></script>
+</body>
+
+</html>
