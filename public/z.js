@@ -1,14 +1,17 @@
 const socket = io();
+var data = {};
 
 function onConnected() {
 	console.log('Connected to server.');
-	
-	setTimeout(showLoginBox, 100);
+	setTimeout(function () {
+		$('#container-login').fadeIn(450);
+		showMessage('Iniciar Sessão');
+	}, 450);
 }
 
 function onDisconnected() {
 	console.log('Disconnected from server.');
-	showMessage('Conexão encerrada. Reconectando em 5 segundos...');
+	showMessage('Conexão encerrada. Reconectando...');
 	
 	window.setTimeout(function() { window.location = window.location; }, 5000);
 }
@@ -33,6 +36,11 @@ function onLoggedIn(data) {
 	$('#login-feedback').removeClass('alert-danger');
 	$('#login-feedback').addClass('alert-success');
 	$('#login-feedback').html('Iniciando sessão...');
+	
+	$('#container-login').fadeOut(450, function() {
+		$("#container-login").remove();
+		showMessage('Bem-vindo, ' + '{username}' + '!');
+	});
 }
 
 function handleSocketEvents() {
@@ -46,10 +54,6 @@ function handleSocketEvents() {
 	onConnected();
 }
 
-function showLoginBox() {
-	$('#login-box').modal('show');
-}
-
 function showMessage(message) {
 	$('#feedback').html(message);
 }
@@ -58,10 +62,6 @@ function disableElement(target) { $(target).attr('disabled', 'disabled'); }
 function enableElement(target) { $(target).removeAttr('disabled'); }
 
 $(function () {
-	$('#login-box').on('hidden.bs.modal', function(e) {
-		socket.disconnect();
-	});
-	
 	$('#login-form').on('submit', function(e) {
 		
 		var login_username = $('#login-user').val();
@@ -73,6 +73,7 @@ $(function () {
 		};
 		
 		socket.emit('login', data);
+		
 		disableElement('#login-btn');
 		$('#login-btn').text('Entrando...');
 		
