@@ -5,7 +5,7 @@ var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 var port = process.env.PORT || 3000;
 var config = {
-	timeout: 5
+	timeout: 30
 };
 
 server.listen(port, function () {
@@ -17,40 +17,42 @@ app.use(express.static(path.join(__dirname, 'public')));
 io.on('connection', function(socket) {
 	console.log('New connection found');
 	socket.mdata = {};
+	
 	var client = socket.mdata;
 	
-	
 	function onConnect() {
-		// Store the last ping of the client
-		client.lastPing = getCurrentTimeInSeconds();
+		socket.on('disconnect',		onDisconnect);
+		socket.on('login',			onLogin);
+	}
+	
+	function onLogin(user) {
+		console.log('Trying to login ' + user.username + ' with pass: ' + user.password);
+		var auth = false;
 		
-		socket.on('disconnect', onDisconnect);
-		socket.on('ping', onPing);
+		if(user.username == 'Niunzin' && user.password == '123')
+			auth = true;
+		
+		if(auth) {
+			socket.user = {
+				name: 'Niunzin',
+				level: 0,
+				experience: 0,
+				title: 0
+			};
+			
+			socket.emit('logged in');
+		} else {
+			socket.emit('not logged in');
+		}
 	}
 	
 	function onDisconnect() {
 		console.log('Disconnected');
 	}
 	
-	function onPing() {
-		console.log('I\'ve got a ping');
-		client.lastPing = getCurrentTimeInSeconds();
-		socket.emit('raw message', 'Pong! ' + client.lastPing);
-	}
-	
-	// Verify the last client's ping and check if the connection still alive
-	function checkPing() {
-		console.log('ping verification');
-		if(client.lastPing <= (getCurrentTimeInSeconds() - config.timeout))
-		{
-			console.log('timed out');
-			socket.emit('raw message', 'Você foi expulso do jogo.');
-			io.emit('disconnected');
-		}
-	}
+	onConnect();
 	
 	socket.emit('raw message', 'Bem-vindo.');
-	setInterval(checkPing, 1000 * config.timeout);
 });
 
 function getCurrentTimeInSeconds() { return Math.floor(Date.now() / 1000); }
